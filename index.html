@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Card Quiz App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">🎓 Flash Card Quiz App</h1>
+            <div class="header-controls">
+                <button class="theme-toggle btn btn--outline btn--sm" aria-label="Toggle theme">
+                    <span class="theme-icon">🌙</span>
+                </button>
+                <div class="language-toggle">
+                    <button class="lang-btn active" data-lang="hi">हिंदी</button>
+                    <button class="lang-btn" data-lang="en">English</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main App Container -->
+    <main class="main-container">
+        <!-- Welcome Screen -->
+        <div class="screen active" id="welcomeScreen">
+            <div class="container">
+                <div class="welcome-content">
+                    <h2 data-hi="स्वागत है!" data-en="Welcome!">स्वागत है!</h2>
+                    <p data-hi="अपना नाम दर्ज करें और क्विज शुरू करें" data-en="Enter your name and start the quiz">अपना नाम दर्ज करें और क्विज शुरू करें</p>
+                    
+                    <div class="form-group">
+                        <label class="form-label" for="userName" data-hi="आपका नाम:" data-en="Your Name:">आपका नाम:</label>
+                        <input type="text" id="userName" class="form-control" placeholder="नाम दर्ज करें / Enter name">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" data-hi="विषय चुनें:" data-en="Choose Topic:">विषय चुनें:</label>
+                        <select id="topicSelect" class="form-control">
+                            <option value="" data-hi="विषय चुनें" data-en="Select Topic">विषय चुनें</option>
+                            <option value="general" data-hi="सामान्य ज्ञान" data-en="General Knowledge">सामान्य ज्ञान</option>
+                            <option value="science" data-hi="विज्ञान और तकनीक" data-en="Science & Technology">विज्ञान और तकनीक</option>
+                            <option value="history" data-hi="इतिहास और भूगोल" data-en="History & Geography">इतिहास और भूगोल</option>
+                            <option value="programming" data-hi="प्रोग्रामिंग" data-en="Programming & Computer Science">प्रोग्रामिंग</option>
+                            <option value="mathematics" data-hi="गणित" data-en="Mathematics">गणित</option>
+                        </select>
+                    </div>
+
+                    <div class="settings-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="timerEnabled">
+                            <span class="checkmark"></span>
+                            <span data-hi="टाइमर सक्रिय करें" data-en="Enable Timer">टाइमर सक्रिय करें</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="shuffleQuestions">
+                            <span class="checkmark"></span>
+                            <span data-hi="प्रश्न फेरबदल करें" data-en="Shuffle Questions">प्रश्न फेरबदल करें</span>
+                        </label>
+                    </div>
+
+                    <button id="startQuizBtn" class="btn btn--primary btn--lg btn--full-width" data-hi="क्विज शुरू करें" data-en="Start Quiz">क्विज शुरू करें</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div class="screen" id="quizScreen">
+            <div class="container">
+                <div class="quiz-header">
+                    <div class="quiz-info">
+                        <span class="user-name"></span>
+                        <span class="topic-name"></span>
+                    </div>
+                    <div class="quiz-stats">
+                        <div class="timer" id="timer">00:00</div>
+                        <div class="score">Score: <span id="currentScore">0</span></div>
+                    </div>
+                </div>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span data-hi="प्रश्न" data-en="Question">प्रश्न</span> <span id="currentQuestion">1</span> / <span id="totalQuestions">5</span>
+                    </div>
+                </div>
+
+                <!-- Flashcard Container -->
+                <div class="flashcard-container">
+                    <div class="flashcard" id="flashcard">
+                        <div class="flashcard-front">
+                            <div class="question-content">
+                                <h3 id="questionText"></h3>
+                                <div id="questionOptions" class="options-container"></div>
+                            </div>
+                        </div>
+                        <div class="flashcard-back">
+                            <div class="answer-content">
+                                <h4 data-hi="सही उत्तर:" data-en="Correct Answer:">सही उत्तर:</h4>
+                                <p id="correctAnswer"></p>
+                                <div class="explanation">
+                                    <h5 data-hi="व्याख्या:" data-en="Explanation:">व्याख्या:</h5>
+                                    <p id="answerExplanation"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feedback Message -->
+                <div class="feedback-message" id="feedbackMessage"></div>
+
+                <!-- Quiz Controls -->
+                <div class="quiz-controls">
+                    <button id="prevBtn" class="btn btn--secondary" data-hi="पिछला" data-en="Previous">पिछला</button>
+                    <button id="flipBtn" class="btn btn--outline" data-hi="कार्ड फ्लिप करें" data-en="Flip Card">कार्ड फ्लिप करें</button>
+                    <button id="nextBtn" class="btn btn--primary" data-hi="अगला" data-en="Next">अगला</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div class="screen" id="resultsScreen">
+            <div class="container">
+                <div class="results-content">
+                    <h2 data-hi="परिणाम" data-en="Results">परिणाम</h2>
+                    
+                    <div class="score-card">
+                        <div class="final-score">
+                            <span class="score-number" id="finalScore">0</span>
+                            <span class="score-total">/ <span id="totalQuestionsResult">5</span></span>
+                        </div>
+                        <div class="score-percentage" id="scorePercentage">0%</div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-value" id="correctAnswers">0</div>
+                            <div class="stat-label" data-hi="सही उत्तर" data-en="Correct">सही उत्तर</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="wrongAnswers">0</div>
+                            <div class="stat-label" data-hi="गलत उत्तर" data-en="Wrong">गलत उत्तर</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="timeTaken">0:00</div>
+                            <div class="stat-label" data-hi="समय लिया" data-en="Time Taken">समय लिया</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value" id="accuracy">0%</div>
+                            <div class="stat-label" data-hi="सटीकता" data-en="Accuracy">सटीकता</div>
+                        </div>
+                    </div>
+
+                    <div class="results-actions">
+                        <button id="reviewBtn" class="btn btn--outline btn--lg" data-hi="गलत उत्तर देखें" data-en="Review Wrong Answers">गलत उत्तर देखें</button>
+                        <button id="restartBtn" class="btn btn--secondary btn--lg" data-hi="दोबारा करें" data-en="Try Again">दोबारा करें</button>
+                        <button id="newQuizBtn" class="btn btn--primary btn--lg" data-hi="नया क्विज" data-en="New Quiz">नया क्विज</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Review Screen -->
+        <div class="screen" id="reviewScreen">
+            <div class="container">
+                <div class="review-content">
+                    <h2 data-hi="गलत उत्तरों की समीक्षा" data-en="Review Wrong Answers">गलत उत्तरों की समीक्षा</h2>
+                    <div id="reviewList" class="review-list"></div>
+                    <button id="backToResultsBtn" class="btn btn--primary btn--lg" data-hi="परिणामों पर वापस जाएं" data-en="Back to Results">परिणामों पर वापस जाएं</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Audio for feedback (hidden) -->
+    <audio id="correctSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRvIAAABXQVZFZm10IBAAAAABAAAA" type="audio/wav">
+    </audio>
+    <audio id="wrongSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRvIAAABXQVZFZm10IBAAAAABAAAA" type="audio/wav">
+    </audio>
+
+    <script src="app.js"></script>
+</body>
+</html>
